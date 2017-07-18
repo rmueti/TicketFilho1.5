@@ -1,0 +1,22 @@
+footer {
+  font-size: 10px;
+  padding-top: 20px;
+}
+
+
+.data {
+  color: #363;
+  padding-left: 6px;
+}
+
+.hidden_box {
+	display: none !important;
+}
+
+.shown_box {
+	display: block !important;
+}
+
+body{
+ width: 90%; 
+}
