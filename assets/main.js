@@ -129,7 +129,7 @@ function ticketOrganize(client, callback) {
 		requestCurrentForm(client, function(data) {
 			var currentTicketForm = data;
 			
-			//console.log(allFields);
+			console.log(allFields);
 			//console.log(currentTicketForm);
 			
 			for(i=0; i < currentTicketForm.ticket_form.ticket_field_ids.length; i++){

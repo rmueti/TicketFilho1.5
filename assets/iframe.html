@@ -9,24 +9,15 @@
 	</head>
 	
 	<body>
-		<div id="content"></div>
+		<div id="content" ></div>
+		
 		<script id="error-template" type="text/x-handlebars-template">
 			<p>{{status}} - {{statusText}} error. Please report a bug at the link below.</p>
-		</script>
-
-		<!-- JavaScript libs -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/jquery/3.0.0/jquery.min.js"></script>
-		<script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+		</script>		
 		
-		
-		<script type="text/javascript" src="main.js"></script>
-		<script type="text/javascript" src="utils.js"></script>
-		<script type="text/javascript" src="rules.js"></script>
-		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script id="menu" type="text/x-handlebars-template">
-			<form id="submitForm">				
-				<div class="container">
+			<form id="submitForm" >				
+				<div class="container" style="width: 290px;">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Criar</h3>
@@ -41,13 +32,52 @@
 		</script>
 			
 		<script id="requester-template" type="text/x-handlebars-template">
-			<form id="submitForm">
+			<form id="submitForm" style="width: 290px;">
 				{{#if ticket_fields}}
 					{{#each ticket_fields}}
+					
+						{{#ifEquals this.type 'subject'}}
+						<div class="form-group" id="campo_{{this.id}}">
+							<label for="{{this.id}}">{{this.title}}</label>
+							<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+						</div>
+						{{/ifEquals}}
+						
+						{{#ifEquals this.type 'description'}}
+						<div class="form-group" id="campo_{{this.id}}">
+							<label for="{{this.id}}">{{this.title}}</label>
+							<textarea type="text" class="form-control" rows="3" id="{{this.id}}" placeholder="{{this.raw_title}}"/>
+						</div>
+						{{/ifEquals}}
+						
+						{{#ifEquals this.type 'tickettype'}}
+						<div class="form-group" id="campo_{{this.id}}">
+							<label for="{{this.id}}">{{this.title}}</label>
+							<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
+								<option value="">-</option>
+								{{#each this.system_field_options}}
+									<option value="{{this.value}}">{{this.name}}</option>
+								{{/each}}
+							</select>
+						</div>
+						{{/ifEquals}}
+						
+						{{#ifEquals this.type 'priority'}}
+						<div class="form-group" id="campo_{{this.id}}">
+							<label for="{{this.id}}">{{this.title}}</label>
+							<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
+								<option value="">-</option>
+								{{#each this.system_field_options}}
+									<option value="{{this.value}}">{{this.name}}</option>
+								{{/each}}
+							</select>
+						</div>
+						{{/ifEquals}}
+					
 						{{#ifEquals this.type 'text'}}
 						<div class="form-group" id="campo_{{this.id}}">
 							<label for="{{this.id}}">{{this.title}}</label>
-							<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" />
+							<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
 						</div>
 						{{/ifEquals}}
 
@@ -68,6 +98,16 @@
 				<button class="btn btn-primary" type="submit">Enviar</button>
 			</form>
 		</script>
+		
+		<!-- JavaScript libs -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/jquery/3.0.0/jquery.min.js"></script>
+		<script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>			
+		<script type="text/javascript" src="main.js"></script>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="rules.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
 	</body>
 
 </html>
