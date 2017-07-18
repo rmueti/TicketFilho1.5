@@ -2,7 +2,7 @@ var campos_requeridos=[];
 
 $(function(){
 	var client = ZAFClient.init();
-	client.invoke('resize', { width: '90%', height: '400px' });
+	client.invoke('resize', { width: '100%', height: '400px' });
 	menu();
 });
 
@@ -14,6 +14,45 @@ function clicou()
 		hideConditionals();
 	});
 }
+
+function autoFillClick() {
+	var client = ZAFClient.init();
+	ticketOrganize(client, function(data){
+		showInfo(data);
+		hideConditionals();
+		requestCurrentTicket(client, function(data) {			
+			//fill standard fields
+			$('#subject_id').val(data.ticket.subject);
+			$('#description_id').val(data.ticket.description);
+			$('#stickettype_id').val(data.ticket.type);
+			$('#priority_id').val(data.ticket.priority);
+			
+			//fill custom fields
+			var allElems = document.getElementsByTagName("*");
+			var allCustoms = data.ticket.custom_fields;
+			for(i=0; i < allElems.length; i++){
+				for(j=0; j < allCustoms.length; j++){
+					if(allElems[i].id == allCustoms[j].id) {
+						$('#'+allElems[i].id).val(allCustoms[j].value);
+						break;
+					}
+				}
+			}
+			//show filled fields...
+			for(i=0; i < allCustoms.length; i++) {
+				var innerValue = $('#'+allCustoms[i].id).val();
+				if(innerValue!='' && innerValue!='-') {
+					var el = document.getElementById('campo_'+allCustoms[i].id);
+					if(el) {
+						el.className = 'shown_box';
+					}
+				}
+			}
+			
+		});
+	});
+}
+
 
 function menu()
 {
