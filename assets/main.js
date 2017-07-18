@@ -5,7 +5,9 @@ var CURRENT_FORM = {};
 $(function(){
 	var client = ZAFClient.init();
 	client.invoke('resize', { width: '100%', height: '400px' });
-	menu();
+	requestAllTickets(client, function(data){
+		menu(data);
+	});
 });
 
 function clicou()
@@ -59,11 +61,18 @@ function autoFillClick() {
 	});
 }
 
-function menu()
+function menu(data)
 {
+	var family = {
+		father : "",
+		sons: []
+	}
+	
+	
+	
 	var source = $("#menu").html();
 	var template = Handlebars.compile(source);
-	var html = template();
+	var html = template(family);
 	$("#content").html(html);
 }
 
@@ -91,7 +100,7 @@ function getCurrentTicket(client, callback)
 }
 
 //Request via API the current ticket, if the app is ticket_sidebar.
-//Return custom fields in the JSON, but it is slower.
+//Return current ticket in the JSON, but it is slower.
 function requestCurrentTicket(client, callback) {
 	client.get('ticket.id').then( function (ticket) {
 		var settings = {
@@ -106,6 +115,23 @@ function requestCurrentTicket(client, callback) {
 			function(errorData) {
 				console.log(errorData);
 		});
+	});
+};
+
+//Request via API all tickets, if the app is ticket_sidebar.
+//Return custom fields in the JSON, but it is slower.
+function requestAllTickets(client, callback) {
+	var settings = {
+		url: '/api/v2/tickets.json',
+		type:'GET',
+		dataType: 'json',
+	};
+	client.request(settings).then(
+		function(data) {
+			callback(data);
+		},
+		function(errorData) {
+			console.log(errorData);
 	});
 };
 
