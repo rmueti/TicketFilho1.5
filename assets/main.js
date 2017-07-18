@@ -1,6 +1,8 @@
+var campos_requeridos=[];
+
 $(function(){
 	var client = ZAFClient.init();
-	client.invoke('resize', { width: '100%', height: '300px' });
+	client.invoke('resize', { width: '90%', height: '300px' });
 	menu();
 });
 
@@ -120,7 +122,9 @@ function requestAllTicketFields(client, callback) {
 
 //function to organize the current form into a JSON with all info
 function ticketOrganize(client, callback) {
+	campos_requeridos = [];
 	//empty variable for organized ticket form with all info
+	
 	var formatedTicketForm = {
 		ticket_fields : []
 	};
@@ -129,14 +133,15 @@ function ticketOrganize(client, callback) {
 		requestCurrentForm(client, function(data) {
 			var currentTicketForm = data;
 			
-			//console.log(allFields);
-			//console.log(currentTicketForm);
-			
 			for(i=0; i < currentTicketForm.ticket_form.ticket_field_ids.length; i++){
 				for(j=0; j< allFields.ticket_fields.length; j++) {
-					if(currentTicketForm.ticket_form.ticket_field_ids[i] ==
-						allFields.ticket_fields[j].id) {						
-							formatedTicketForm.ticket_fields.push(allFields.ticket_fields[j]);							
+					if(currentTicketForm.ticket_form.ticket_field_ids[i] == allFields.ticket_fields[j].id)
+					{
+						if(allFields.ticket_fields[j].required===true)
+						{
+							campos_requeridos.push(allFields.ticket_fields[j].id);
+						}
+						formatedTicketForm.ticket_fields.push(allFields.ticket_fields[j]);							
 					}
 				}
 			}
@@ -168,10 +173,6 @@ function onPickSelect(field_id, field_value)
 			{
 				$('#campo_'+selecionado).addClass('shown_box');
 				$('#campo_'+selecionado).removeClass("hidden_box");
-			});
-			$.each(valor.requireds, function(index,requiridos)
-			{
-				$('#campo_'+requiridos).attr('required','true');
 			});
 		}
 	});
@@ -208,6 +209,23 @@ function hideConditionals()
 			hiddenIds[i].className += $('#'+hiddenIds[i]).addClass('hidden_box');
 		}
 	}
+}
+
+function valida_campos_requeridos()
+{
+	$.each(campos_requeridos, function(index,id)
+	{
+		if($('#'+id).val()=="")
+		{
+			$('#error_'+id).html('Atenção, este campo é obrigatório.');
+			$('#'+id).focus();
+			return false;
+		}
+		else
+		{
+			$('#error_'+id).html('');
+		}
+	});
 }
 
 //Handlebars function to coditional if v1 equals v2

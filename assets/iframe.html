@@ -41,32 +41,36 @@
 		</script>
 			
 		<script id="requester-template" type="text/x-handlebars-template">
-			<form id="submitForm">
-				{{#if ticket_fields}}
-					{{#each ticket_fields}}
-						{{#ifEquals this.type 'text'}}
-						<div class="form-group" id="campo_{{this.id}}">
-							<label for="{{this.id}}">{{this.title}}</label>
-							<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" />
-						</div>
-						{{/ifEquals}}
+			<div class="container" style="width: 250px;">
+				<form id="submitForm">
+					{{#if ticket_fields}}
+						{{#each ticket_fields}}
+							{{#ifEquals this.type 'text'}}
+							<div class="form-group" id="campo_{{this.id}}">
+								<label for="{{this.id}}">{{this.title}}</label>
+								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" />
+								<small id="error_{{this.id}}" class="form-text text-muted"></small>
+							</div>
+							{{/ifEquals}}
 
-						{{#ifEquals this.type 'tagger'}}
-						<div class="form-group" id="campo_{{this.id}}">
-							<label for="{{this.id}}">{{this.title}}</label>
-							<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
-								<option value="">-</option>
-								{{#each this.custom_field_options}}
-									<option value="{{this.value}}">{{this.raw_name}}</option>
-								{{/each}}
-							</select>
-						</div>
-						{{/ifEquals}}
-					{{/each}}
-				{{/if}}
-				<button class="btn btn-success" type="button" onclick="menu();">Voltar</button>
-				<button class="btn btn-primary" type="submit">Enviar</button>
-			</form>
+							{{#ifEquals this.type 'tagger'}}
+							<div class="form-group" id="campo_{{this.id}}">
+								<label for="{{this.id}}">{{this.title}}</label>
+								<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
+									<option value="">-</option>
+									{{#each this.custom_field_options}}
+										<option value="{{this.value}}">{{this.raw_name}}</option>
+									{{/each}}
+								</select>
+								<small id="error_{{this.id}}" class="form-text text-muted"></small>
+							</div>
+							{{/ifEquals}}
+						{{/each}}
+					{{/if}}
+					<button class="btn btn-success" type="button" onclick="menu();">Voltar</button>
+					<button class="btn btn-primary" type="button" onclick="valida_campos_requeridos();">Enviar</button>
+				</form>
+			</div>
 		</script>
 	</body>
 
