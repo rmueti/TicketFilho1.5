@@ -2,7 +2,7 @@ var campos_requeridos=[];
 
 $(function(){
 	var client = ZAFClient.init();
-	client.invoke('resize', { width: '100%', height: '300px' });
+	client.invoke('resize', { width: '90%', height: '400px' });
 	menu();
 });
 
@@ -120,6 +120,45 @@ function requestAllTicketFields(client, callback) {
 	});
 };
 
+function cria_ticket()
+{
+	var client = ZAFClient.init();
+	var formulario = [];
+	var post = [];
+	requestCurrentForm(client, function(data)
+	{
+		var currentTicketForm = data.ticket_form.ticket_field_ids;
+		$.each(currentTicketForm, function(index,id)
+		{
+			if($('#'+id).val()!=undefined)
+			{
+				formulario[id]=$('#'+id).val();
+			}
+		});
+		
+		post['ticket']=formulario;
+		
+		console.log(data);
+		console.log(post);
+		
+		/*var settings = {
+			url: '/api/v2/tickets.json',
+			type:'POST',
+			dataType: 'json',
+			data: JSON.stringify(post)
+		};	
+		client.request(settings).then(
+			function(data) {
+				console.log(data);
+			},
+			function(errorData) {
+				console.log(errorData);
+		});*/
+	});
+
+	
+};
+
 //function to organize the current form into a JSON with all info
 function ticketOrganize(client, callback) {
 	campos_requeridos = [];
@@ -132,7 +171,6 @@ function ticketOrganize(client, callback) {
 		var allFields = data;
 		requestCurrentForm(client, function(data) {
 			var currentTicketForm = data;
-			
 			for(i=0; i < currentTicketForm.ticket_form.ticket_field_ids.length; i++){
 				for(j=0; j< allFields.ticket_fields.length; j++) {
 					if(currentTicketForm.ticket_form.ticket_field_ids[i] == allFields.ticket_fields[j].id)
@@ -284,4 +322,3 @@ function hideConditionals()
 	}
 }
 */
-
