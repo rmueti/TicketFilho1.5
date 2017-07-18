@@ -24,7 +24,25 @@
 						</div>
 						<div class="panel-body">
 							<button class="btn btn-success" onclick="clicou();" type="button">Em Branco</button>
-							<button class="btn btn-primary" onclick="clicou();" type="button">Preechido</button>
+							<button class="btn btn-primary" onclick="autoFillClick();" type="button">Preechido</button>
+						</div>
+					</div>
+				</div>
+				<div class="container" style="width: 100%;">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h3 class="panel-title">Ticket Pai</h3>
+						</div>
+						<div class="panel-body">
+						</div>
+					</div>
+				</div>
+				<div class="container" style="width: 100%;">
+					<div class="panel panel-danger">
+						<div class="panel-heading">
+							<h3 class="panel-title">Ticket(s) Filho(s)</h3>
+						</div>
+						<div class="panel-body">
 						</div>
 					</div>
 				</div>
@@ -61,7 +79,7 @@
 								{{#each this.system_field_options}}
 									<option value="{{this.value}}">{{this.name}}</option>
 								{{/each}}
-							</select>
+							</select>	
 							<small id="error_{{this.id}}" class="form-text text-muted"></small>
 						</div>
 						{{/ifEquals}}

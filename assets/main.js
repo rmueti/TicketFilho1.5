@@ -182,7 +182,7 @@ function cria_ticket()
 		post['ticket']['subject']=$('#subject_id').val();
 		
 		var i={};
-		i['body']=$('#description_id').html();
+		i['body']=$('#description_id').val();
 		post['ticket']['comment']=i;
 		
 		post['ticket']['custom_fields']=formulario;
