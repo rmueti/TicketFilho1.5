@@ -24,7 +24,7 @@
 						</div>
 						<div class="panel-body">
 							<button class="btn btn-success" onclick="clicou();" type="button">Em Branco</button>
-							<button class="btn btn-primary" onclick="autoFillClick();" type="button">Preechido</button>
+							<button class="btn btn-primary" onclick="clicou();" type="button">Preechido</button>
 						</div>
 					</div>
 				</div>
@@ -40,16 +40,16 @@
 						{{#ifEquals this.type 'subject'}}
 							<div class="form-group" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
-								<small id="error_{{this.id}}" class="form-text text-muted"></small>
+								<input type="text" class="form-control" id="subject_id" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<small id="error_subject_id" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
 						
 						{{#ifEquals this.type 'description'}}
 							<div class="form-group" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<textarea type="text" class="form-control" rows="3" id="{{this.id}}" placeholder="{{this.raw_title}}"/>
-								<small id="error_{{this.id}}" class="form-text text-muted"></small>
+								<textarea type="text" class="form-control" rows="3" id="description_id" placeholder="{{this.raw_title}}"/>
+								<small id="error_description_id" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
 						

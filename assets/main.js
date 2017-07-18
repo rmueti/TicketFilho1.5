@@ -124,7 +124,7 @@ function cria_ticket()
 {
 	var client = ZAFClient.init();
 	var formulario = [];
-	var post = [];
+	var post = {};
 	requestCurrentForm(client, function(data)
 	{
 		var currentTicketForm = data.ticket_form.ticket_field_ids;
@@ -132,16 +132,23 @@ function cria_ticket()
 		{
 			if($('#'+id).val()!=undefined)
 			{
-				formulario[id]=$('#'+id).val();
+				var i={};
+				i['id']=id;
+				i['value']=$('#'+id).val();
+				formulario.push(i);
 			}
 		});
 		
-		post['ticket']=formulario;
+		post['ticket']={};
+		post['ticket']['subject']=$('#subject_id').val();
 		
-		console.log(data);
-		console.log(post);
+		var i={};
+		i['body']=$('#description_id').html();
+		post['ticket']['comment']=i;
 		
-		/*var settings = {
+		post['ticket']['custom_fields']=formulario;
+		
+		var settings = {
 			url: '/api/v2/tickets.json',
 			type:'POST',
 			dataType: 'json',
@@ -153,7 +160,7 @@ function cria_ticket()
 			},
 			function(errorData) {
 				console.log(errorData);
-		});*/
+		});
 	});
 
 	
@@ -234,19 +241,24 @@ function onPickSelect(field_id, field_value) {
 
 function valida_campos_requeridos()
 {
+	var error=false;
 	$.each(campos_requeridos, function(index,id)
 	{
 		if($('#'+id).val()=="")
 		{
 			$('#error_'+id).html('Atenção, este campo é obrigatório.');
 			$('#'+id).focus();
-			return false;
+			error=true;
 		}
 		else
 		{
 			$('#error_'+id).html('');
 		}
 	});
+	if(!error)
+	{
+		cria_ticket();	
+	}
 }
 
 //Handlebars function to coditional if v1 equals v2
