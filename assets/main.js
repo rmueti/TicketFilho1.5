@@ -164,6 +164,14 @@ function requestAllTicketFields(client, callback) {
 	});
 };
 
+
+function atualiza_ticket()
+{
+	console.log(CURRENT_TICKET.ticket.tags);
+	return false;
+}
+
+
 function cria_ticket()
 {
 	var client = ZAFClient.init();
@@ -180,6 +188,10 @@ function cria_ticket()
 		}
 	});
 	
+	var tags=CURRENT_TICKET.ticket.tags;
+	tags[tags.length] = 'filho_'+CURRENT_TICKET.ticket.id;
+	tags[tags.length] = 'filho';
+	
 	var settings = {
 	url: '/api/v2/tickets.json',
 	contentType:'application/json',
@@ -190,21 +202,32 @@ function cria_ticket()
 				subject : $('#subject_id').val(),
 				comment : { body: $('#description_id').val() },
 				priority : $('#priority').val(),
-				tags : CURRENT_TICKET.ticket.tags,
+				tags : tags,
 				ticket_form_id : CURRENT_TICKET.ticket.ticket_form_id,
 				brand_id : CURRENT_TICKET.ticket.brand_id,
 				custom_fields: formulario
 			}
 		}
 	)};
+	client.request(settings);
 	
-	client.request(settings).then(
-		function(data) {
-			console.log(data);
-		},
-		function(errorData) {
-			console.log(errorData);
-	});
+	tags.pop();
+	tags.pop();
+	tags[tags.length] = 'pai';
+
+	var settings = {
+	url: '/api/v2/tickets/'+CURRENT_TICKET.ticket.id+'.json',
+	contentType:'application/json',
+	type: 'PUT',
+	data: JSON.stringify(
+		{
+			ticket: {
+				id : CURRENT_TICKET.ticket.id,
+				tags : tags
+			}
+		}
+	)};
+	client.request(settings);
 	
 };
 
