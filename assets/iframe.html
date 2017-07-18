@@ -9,15 +9,15 @@
 	</head>
 	
 	<body>
-		<div id="content" ></div>
+		<div id="content"></div>
 		
 		<script id="error-template" type="text/x-handlebars-template">
 			<p>{{status}} - {{statusText}} error. Please report a bug at the link below.</p>
-		</script>		
+		</script>
 		
 		<script id="menu" type="text/x-handlebars-template">
 			<form id="submitForm" >				
-				<div class="container" style="width: 270px;">
+				<div class="container" style="width: 100%;">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Criar</h3>
@@ -32,13 +32,13 @@
 		</script>
 			
 		<script id="requester-template" type="text/x-handlebars-template">
-			<div class="container" style="width: 240px;">
+			<div class="container" style="width: 100%;">
 				<form id="ticket_form">
 				{{#if ticket_fields}}
 					{{#each ticket_fields}}
 					
 						{{#ifEquals this.type 'subject'}}
-							<div class="form-group" id="campo_{{this.id}}">
+							<div class="form-group">
 								<label for="{{this.id}}">{{this.title}}</label>
 								<input type="text" class="form-control" id="subject_id" placeholder="{{this.raw_title}}" style="height:35px;"/>
 								<small id="error_subject_id" class="form-text text-muted"></small>
@@ -46,7 +46,7 @@
 						{{/ifEquals}}
 						
 						{{#ifEquals this.type 'description'}}
-							<div class="form-group" id="campo_{{this.id}}">
+							<div class="form-group">
 								<label for="{{this.id}}">{{this.title}}</label>
 								<textarea type="text" class="form-control" rows="3" id="description_id" placeholder="{{this.raw_title}}"/>
 								<small id="error_description_id" class="form-text text-muted"></small>
@@ -54,9 +54,9 @@
 						{{/ifEquals}}
 						
 						{{#ifEquals this.type 'tickettype'}}
-						<div class="form-group" id="campo_{{this.id}}">
+						<div class="form-group">
 							<label for="{{this.id}}">{{this.title}}</label>
-							<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
+							<select class="form-control" id="stickettype_id" onChange="onPickSelect({{this.id}}, this.value);">
 								<option value="">-</option>
 								{{#each this.system_field_options}}
 									<option value="{{this.value}}">{{this.name}}</option>
@@ -67,9 +67,9 @@
 						{{/ifEquals}}
 						
 						{{#ifEquals this.type 'priority'}}
-						<div class="form-group" id="campo_{{this.id}}">
+						<div class="form-group">
 							<label for="{{this.id}}">{{this.title}}</label>
-							<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
+							<select class="form-control" id="priority_id" onChange="onPickSelect({{this.id}}, this.value);">
 								<option value="">-</option>
 								{{#each this.system_field_options}}
 									<option value="{{this.value}}">{{this.name}}</option>
@@ -87,20 +87,22 @@
 							</div>
 						{{/ifEquals}}
 
-							{{#ifEquals this.type 'tagger'}}
-							<div class="form-group" id="campo_{{this.id}}">
-								<label for="{{this.id}}">{{this.title}}</label>
-								<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
-									<option value="">-</option>
-									{{#each this.custom_field_options}}
-										<option value="{{this.value}}">{{this.raw_name}}</option>
-									{{/each}}
-								</select>
-								<small id="error_{{this.id}}" class="form-text text-muted"></small>
-							</div>
-							{{/ifEquals}}
+						{{#ifEquals this.type 'tagger'}}
+						<div class="form-group" id="campo_{{this.id}}">
+							<label for="{{this.id}}">{{this.title}}</label>
+							<select class="form-control" id="{{this.id}}" onChange="onPickSelect({{this.id}}, this.value);">
+								<option value="">-</option>
+								{{#each this.custom_field_options}}
+									<option value="{{this.value}}">{{this.raw_name}}</option>
+								{{/each}}
+							</select>
+							<small id="error_{{this.id}}" class="form-text text-muted"></small>
+						</div>
+						{{/ifEquals}}
+						
 						{{/each}}
 					{{/if}}
+					<br/>
 					<button class="btn btn-success" type="button" onclick="menu();">Voltar</button>
 					<button class="btn btn-primary" type="button" onclick="valida_campos_requeridos();">Enviar</button>
 				</form>
