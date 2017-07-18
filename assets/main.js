@@ -2,7 +2,7 @@ var campos_requeridos=[];
 
 $(function(){
 	var client = ZAFClient.init();
-	client.invoke('resize', { width: '90%', height: '300px' });
+	client.invoke('resize', { width: '100%', height: '300px' });
 	menu();
 });
 
@@ -150,6 +150,78 @@ function ticketOrganize(client, callback) {
 	});
 }
 
+//this method is used to hide all "hidden by default" fields
+function hideConditionals() {
+	var allElements = document.getElementsByTagName("*");
+	//get all ids in the document
+	var allIds = [];
+	for (var i = 0, n = allElements.length; i < n; ++i) {
+		var el = allElements[i];
+		if (el.id) { allIds.push(el.id); }
+	}
+	//hide all defalut hidden fields
+	for (i=0; i < cfaRules.length; i++) {
+		for(j=0; j < cfaRules[i].select.length; j++) {
+			var el = document.getElementById('campo_'+cfaRules[i].select[j]);
+			if(el) {
+				el.className = 'hidden_box';
+			}
+		}
+	}
+}
+
+//this method is used to show all conditional fields when pick selection is used
+function onPickSelect(field_id, field_value) {
+	for (i=0; i < cfaRules.length; i++) {
+		if(field_id==cfaRules[i].field) {
+			for(j=0; j < cfaRules[i].select.length; j++) {
+				var el = document.getElementById('campo_'+cfaRules[i].select[j]);
+				if(el) {
+					el.className = 'hidden_box';
+				}
+			}
+		}
+	}
+	for (i=0; i < cfaRules.length; i++) {
+		if(field_id==cfaRules[i].field && field_value==cfaRules[i].value) {
+			for(j=0; j < cfaRules[i].select.length; j++) {
+				var el = document.getElementById('campo_'+cfaRules[i].select[j]);
+				if(el) {
+					el.className = 'shown_box';
+				}
+			}
+		}
+	}
+}
+
+function valida_campos_requeridos()
+{
+	$.each(campos_requeridos, function(index,id)
+	{
+		if($('#'+id).val()=="")
+		{
+			$('#error_'+id).html('Atenção, este campo é obrigatório.');
+			$('#'+id).focus();
+			return false;
+		}
+		else
+		{
+			$('#error_'+id).html('');
+		}
+	});
+}
+
+//Handlebars function to coditional if v1 equals v2
+Handlebars.registerHelper('ifEquals', function(v1, v2, options) {
+	if(v1 == v2)
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+
+
+/*
 function onPickSelect(field_id, field_value)
 {
 	$.each(cfaRules, function(index,valor)
@@ -177,7 +249,8 @@ function onPickSelect(field_id, field_value)
 		}
 	});
 }
-
+*/
+/*
 function hideConditionals()
 {
 	var allIds = [];
@@ -210,29 +283,5 @@ function hideConditionals()
 		}
 	}
 }
+*/
 
-function valida_campos_requeridos()
-{
-	$.each(campos_requeridos, function(index,id)
-	{
-		if($('#'+id).val()=="")
-		{
-			$('#error_'+id).html('Atenção, este campo é obrigatório.');
-			$('#'+id).focus();
-			return false;
-		}
-		else
-		{
-			$('#error_'+id).html('');
-		}
-	});
-}
-
-//Handlebars function to coditional if v1 equals v2
-Handlebars.registerHelper('ifEquals', function(v1, v2, options) {
-	if(v1 == v2)
-	{
-		return options.fn(this);
-	}
-	return options.inverse(this);
-});

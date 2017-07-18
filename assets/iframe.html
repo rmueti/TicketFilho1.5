@@ -17,7 +17,7 @@
 		
 		<script id="menu" type="text/x-handlebars-template">
 			<form id="submitForm" >				
-				<div class="container" style="width: 290px;">
+				<div class="container" style="width: 100%;">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Criar</h3>
@@ -32,7 +32,7 @@
 		</script>
 			
 		<script id="requester-template" type="text/x-handlebars-template">
-			<div class="container" style="width: 250px;">
+			<div class="container" style="width: 100%;">
 				<form id="submitForm">
 				{{#if ticket_fields}}
 					{{#each ticket_fields}}
@@ -78,7 +78,7 @@
 						{{#ifEquals this.type 'text'}}
 							<div class="form-group" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" />
+								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
