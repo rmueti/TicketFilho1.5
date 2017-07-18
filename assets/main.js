@@ -1,4 +1,6 @@
-var campos_requeridos=[];
+var campos_requeridos = [];
+var CURRENT_TICKET = {};
+var CURRENT_FORM = {};
 
 $(function(){
 	var client = ZAFClient.init();
@@ -12,6 +14,9 @@ function clicou()
 	ticketOrganize(client, function(data){
 		showInfo(data);
 		hideConditionals();
+		requestCurrentTicket(client, function(data) {
+			CURRENT_TICKET = data;
+		});
 	});
 }
 
@@ -21,6 +26,7 @@ function autoFillClick() {
 		showInfo(data);
 		hideConditionals();
 		requestCurrentTicket(client, function(data) {			
+			CURRENT_TICKET = data;
 			//fill standard fields
 			$('#subject_id').val(data.ticket.subject);
 			$('#description_id').val(data.ticket.description);
@@ -52,7 +58,6 @@ function autoFillClick() {
 		});
 	});
 }
-
 
 function menu()
 {
@@ -163,45 +168,43 @@ function cria_ticket()
 {
 	var client = ZAFClient.init();
 	var formulario = [];
-	var post = {};
-	requestCurrentForm(client, function(data)
+	var currentTicketForm = CURRENT_FORM.ticket_form.ticket_field_ids;
+	$.each(currentTicketForm, function(index,id)
 	{
-		var currentTicketForm = data.ticket_form.ticket_field_ids;
-		$.each(currentTicketForm, function(index,id)
+		if($('#'+id).val()!=undefined)
 		{
-			if($('#'+id).val()!=undefined)
-			{
-				var i={};
-				i['id']=id;
-				i['value']=$('#'+id).val();
-				formulario.push(i);
-			}
-		});
-		
-		post['ticket']={};
-		post['ticket']['subject']=$('#subject_id').val();
-		
-		var i={};
-		i['body']=$('#description_id').html();
-		post['ticket']['comment']=i;
-		
-		post['ticket']['custom_fields']=formulario;
-		
-		var settings = {
-			url: '/api/v2/tickets.json',
-			type:'POST',
-			dataType: 'json',
-			data: JSON.stringify(post)
-		};	
-		client.request(settings).then(
-			function(data) {
-				console.log(data);
-			},
-			function(errorData) {
-				console.log(errorData);
-		});
+			var i={};
+			i['id']=id;
+			i['value']=$('#'+id).val();
+			formulario.push(i);
+		}
 	});
-
+	
+	var settings = {
+	url: '/api/v2/tickets.json',
+	contentType:'application/json',
+	type: 'POST',
+	data: JSON.stringify(
+		{
+			ticket: {
+				subject : $('#subject_id').val(),
+				comment : { body: $('#description_id').val() },
+				priority : $('#priority').val(),
+				tags : CURRENT_TICKET.ticket.tags,
+				ticket_form_id : CURRENT_TICKET.ticket.ticket_form_id,
+				brand_id : CURRENT_TICKET.ticket.brand_id,
+				custom_fields: formulario
+			}
+		}
+	)};
+	
+	client.request(settings).then(
+		function(data) {
+			console.log(data);
+		},
+		function(errorData) {
+			console.log(errorData);
+	});
 	
 };
 
@@ -217,6 +220,7 @@ function ticketOrganize(client, callback) {
 		var allFields = data;
 		requestCurrentForm(client, function(data) {
 			var currentTicketForm = data;
+			CURRENT_FORM = data;
 			for(i=0; i < currentTicketForm.ticket_form.ticket_field_ids.length; i++){
 				for(j=0; j< allFields.ticket_fields.length; j++) {
 					if(currentTicketForm.ticket_form.ticket_field_ids[i] == allFields.ticket_fields[j].id)
