@@ -43,6 +43,9 @@
 							<h3 class="panel-title">Ticket(s) Filho(s)</h3>
 						</div>
 						<div class="panel-body">
+							{{#each filhos}}
+								<p><span class="label label-primary">{{this.id}}</span> <a href="#" onclick="window.opener='{{this.url}}'">{{this.assunto}}</a></p>
+							{{/each}}
 						</div>
 					</div>
 				</div>

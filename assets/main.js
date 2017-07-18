@@ -2,7 +2,7 @@ var campos_requeridos = [];
 var CURRENT_TICKET = {};
 var CURRENT_FORM = {};
 
-$(function(){
+$(document).ready(function(){
 	var client = ZAFClient.init();
 	client.invoke('resize', { width: '100%', height: '400px' });
 	menu();
@@ -61,10 +61,39 @@ function autoFillClick() {
 
 function menu()
 {
-	var source = $("#menu").html();
-	var template = Handlebars.compile(source);
-	var html = template();
-	$("#content").html(html);
+	var client = ZAFClient.init();
+	var filhos=[];
+	var variaveis={};
+	requestCurrentTicket(client, function(data) {
+		var settings = {
+				url: '/api/v2/search.json?query=type:ticket tags:filho_'+data.ticket.id,
+				type:'GET',
+				dataType: 'json',
+			};
+		client.request(settings).then(
+			function(data)
+			{
+				console.log(data);
+				if(data.count>0)
+				{
+					$.each(data.results, function(index,info)
+					{
+						var filho={};
+						filho['assunto']=info.subject;
+						filho['id']=info.id;
+						filho['url']='http://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
+						filhos.push(filho);
+					});
+				}
+				variaveis.filhos=filhos;
+				var source = $("#menu").html();
+				var template = Handlebars.compile(source);
+				console.log(variaveis);
+				var html = template(variaveis);
+				$("#content").html(html);
+			}
+		);
+	});
 }
 
 function showInfo(data)
@@ -228,7 +257,7 @@ function cria_ticket()
 		}
 	)};
 	client.request(settings);
-	
+	menu();
 };
 
 //function to organize the current form into a JSON with all info
