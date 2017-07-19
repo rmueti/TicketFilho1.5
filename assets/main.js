@@ -2,12 +2,10 @@ var campos_requeridos = [];
 var CURRENT_TICKET = {};
 var CURRENT_FORM = {};
 
-$(document).ready(function(){
+$(document).ready(function() {
 	var client = ZAFClient.init();
 	client.invoke('resize', { width: '100%', height: '400px' });
-	requestAllTickets(client, function(data){
-		menu(data);
-	});
+	menu();
 });
 
 function clicou()
@@ -61,7 +59,7 @@ function autoFillClick() {
 	});
 }
 
-function menu(data)
+function menu()
 {
 	var client = ZAFClient.init();
 	var filhos=[];
@@ -83,7 +81,7 @@ function menu(data)
 						var filho={};
 						filho['assunto']=info.subject;
 						filho['id']=info.id;
-						filho['url']='http://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
+						filho['url']='https://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
 						filhos.push(filho);
 					});
 				}
@@ -211,14 +209,6 @@ function requestAllTicketFields(client, callback) {
 			console.log(errorData);
 	});
 };
-
-
-function atualiza_ticket()
-{
-	console.log(CURRENT_TICKET.ticket.tags);
-	return false;
-}
-
 
 function cria_ticket()
 {
@@ -383,68 +373,3 @@ Handlebars.registerHelper('ifEquals', function(v1, v2, options) {
 	}
 	return options.inverse(this);
 });
-
-
-/*
-function onPickSelect(field_id, field_value)
-{
-	$.each(cfaRules, function(index,valor)
-	{
-		if(field_id==valor.field)
-		{
-			$.each(valor.select, function(index,selecionado)
-			{
-				$('#campo_'+selecionado).addClass('hidden_box');
-				$('#campo_'+selecionado).removeClass("shown_box");
-				$('#campo_'+selecionado).removeAttr('required');
-			});
-		}
-	});
-	
-	$.each(cfaRules, function(index,valor)
-	{
-		if(field_id==valor.field && field_value==valor.value)
-		{
-			$.each(valor.select, function(index,selecionado)
-			{
-				$('#campo_'+selecionado).addClass('shown_box');
-				$('#campo_'+selecionado).removeClass("hidden_box");
-			});
-		}
-	});
-}
-*/
-/*
-function hideConditionals()
-{
-	var allIds = [];
-	var text = document.getElementsByTagName("input");
-	for(i=0;i<text.length;i++)
-	{
-		allIds.push('campo_'+text[i].id);
-	}
-	var select = document.getElementsByTagName("select");
-	for(i=0;i<select.length;i++)
-	{
-		allIds.push('campo_'+select[i].id);
-	}
-	
-	var hiddenIds = [];
-	for (i=0; i < cfaRules.length; i++)
-	{
-		for(j=0; j < cfaRules[i].select.length; j++)
-		{
-			hiddenIds.push('campo_'+cfaRules[i].select[j]);
-		}
-	}
-	hiddenIds = hiddenIds.map(String);
-	
-	for(i=0; i < allIds.length; i++)
-	{
-		if($.inArray(allIds[i], hiddenIds)!=-1)
-		{
-			hiddenIds[i].className += $('#'+hiddenIds[i]).addClass('hidden_box');
-		}
-	}
-}
-*/
