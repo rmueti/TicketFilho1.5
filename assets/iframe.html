@@ -157,6 +157,14 @@
 							</div>
 						{{/ifEquals}}
 						
+						{{#ifEquals this.type 'date'}}
+							<div style="padding-top: 10px" id="campo_{{this.id}}">
+								<label for="{{this.id}}">{{this.title}}</label>
+								<input type="date" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<small id="error_{{this.id}}" class="form-text text-muted"></small>
+							</div>
+						{{/ifEquals}}
+						
 						{{#ifEquals this.type 'textarea'}}
 							<div style="padding-top: 10px" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
@@ -164,6 +172,7 @@
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
+						
 
 						{{#ifEquals this.type 'tagger'}}
 						<div style="padding-top: 10px" id="campo_{{this.id}}">

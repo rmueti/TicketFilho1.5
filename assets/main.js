@@ -88,6 +88,7 @@ function autoFillClick() {
 		hideConditionals();
 		requestCurrentTicket(client, function(data) {			
 			CURRENT_TICKET = data;
+			
 			//fill standard fields
 			$('#subject_id').val(data.ticket.subject);
 			$('#description_id').val(data.ticket.description);
@@ -100,7 +101,7 @@ function autoFillClick() {
 			for(i=0; i < allElems.length; i++){
 				for(j=0; j < allCustoms.length; j++){
 					if(allElems[i].id == allCustoms[j].id) {
-						$('#'+allElems[i].id).val(allCustoms[j].value);
+						$('#'+allElems[i].id).val(allCustoms[j].value);						
 						break;
 					}
 				}
@@ -164,7 +165,7 @@ function menu()
 		);
 		
 		variavel=[];
-		console.log(variavel);
+		//console.log(variavel);
 		tags=ticketAtual.ticket.tags;
 		if(tags.indexOf('filho')!=(-1))
 		{
@@ -361,16 +362,13 @@ function hideConditionals() {
 
 //this method is used to show all conditional fields when pick selection is used
 function onPickSelect(field_id, field_value) {
-	for (i=0; i < cfaRules.length; i++) {
-		if(field_id==cfaRules[i].field) {
-			for(j=0; j < cfaRules[i].select.length; j++) {
-				var el = document.getElementById('campo_'+cfaRules[i].select[j]);
-				if(el) {
-					el.className = 'hidden_box';
-				}
-			}
-		}
-	}
+
+	//call the recursive function to hide all conditional sons in the whole tree
+	var newStack = [];
+	newStack[newStack.length] = field_id;	
+	hideSomething(newStack);
+	
+	//now run through again and show only if the id and value match
 	for (i=0; i < cfaRules.length; i++) {
 		if(field_id==cfaRules[i].field && field_value==cfaRules[i].value) {
 			for(j=0; j < cfaRules[i].select.length; j++) {
@@ -380,6 +378,34 @@ function onPickSelect(field_id, field_value) {
 				}
 			}
 		}
+	}
+}
+
+//recursive function to hide all the tree of conditional fields
+//the parameter needs to be a stack of Ids
+function hideSomething(newStack) {
+	var anotherStack = [];
+	
+	if(newStack.length>0) {
+		for(z=0; z < newStack.length; z++) {
+			for (i=0; i < cfaRules.length; i++) {
+				if(newStack[z]==cfaRules[i].field) {
+					for(j=0; j < cfaRules[i].select.length; j++) {
+						var el = document.getElementById('campo_' + cfaRules[i].select[j]);
+						if(el) {
+							el.className = 'hidden_box';
+						}
+						//hide values if hide field
+						$('#'+cfaRules[i].select[j]).val('');
+						//build another stack to check
+						anotherStack[anotherStack.length] = cfaRules[i].select[j];
+					}
+				}
+			}
+		}
+	}	
+	if(anotherStack.length>0) {
+		hideSomething(anotherStack);
 	}
 }
 
