@@ -16,7 +16,7 @@
 		</script>
 		
 		<script id="menu" type="text/x-handlebars-template">
-			<form id="submitForm" >				
+			<form id="submitForm" >	
 				<div class="container" style="width: 100%;">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
@@ -69,10 +69,8 @@
 					{{/ifEquals}}
 						{{ticket.id}}
 					</span>&nbsp;
-					<a href="#/tickets/{{this.id}}">{{ticket.subject}}</a>
+					{{ticket.subject}} #{{ticket.id}}
 				</p>
-			{{else}}
-				Não tem dad!
 			{{/if}}
 		</script>
 		
@@ -96,7 +94,7 @@
 					{{/ifEquals}}
 						{{this.id}}
 					</span>&nbsp;
-					<a href="#/tickets/{{this.id}}">{{this.assunto}}</a>
+					{{this.assunto}}
 				</p>
 			{{/each}}
 		</script>
