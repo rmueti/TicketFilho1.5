@@ -1,16 +1,78 @@
 var campos_requeridos = [];
 var CURRENT_TICKET = {};
 var CURRENT_FORM = {};
+var client = null;
 
 $(document).ready(function() {
-	var client = ZAFClient.init();
+	client = ZAFClient.init();
 	client.invoke('resize', { width: '100%', height: '400px' });
 	menu();
 });
 
+function cria_ticket()
+{
+	var formulario = [];
+	var currentTicketForm = CURRENT_FORM.ticket_form.ticket_field_ids;
+	$.each(currentTicketForm, function(index,id)
+	{
+		if($('#'+id).val()!=undefined)
+		{
+			var i={};
+			i['id']=id;
+			i['value']=$('#'+id).val();
+			formulario.push(i);
+		}
+	});
+	
+	var tags=CURRENT_TICKET.ticket.tags;
+	tags[tags.length] = 'filho_'+CURRENT_TICKET.ticket.id;
+	tags[tags.length] = 'filho';
+	
+	var settings = {
+	url: '/api/v2/tickets.json',
+	contentType:'application/json',
+	type: 'POST',
+	async: false,
+	data: JSON.stringify(
+		{
+			ticket: {
+				subject : $('#subject_id').val(),
+				comment : { body: $('#description_id').val() },
+				priority : $('#priority').val(),
+				tags : tags,
+				ticket_form_id : CURRENT_TICKET.ticket.ticket_form_id,
+				brand_id : CURRENT_TICKET.ticket.brand_id,
+				custom_fields: formulario
+			}
+		}
+	)};	
+	client.request(settings);
+	settings = null;
+	
+	tags.pop();
+	tags.pop();
+	tags[tags.length] = 'pai';
+
+	var settings = {
+	url: '/api/v2/tickets/'+CURRENT_TICKET.ticket.id+'.json',
+	contentType:'application/json',
+	type: 'PUT',
+	async: false,
+	data: JSON.stringify(
+		{
+			ticket: {
+				id : CURRENT_TICKET.ticket.id,
+				tags : tags
+			}
+		}
+	)};
+	client.request(settings);
+	settings = null;
+	menu();
+};
+
 function clicou()
 {
-	var client = ZAFClient.init();
 	ticketOrganize(client, function(data){
 		showInfo(data);
 		hideConditionals();
@@ -21,7 +83,6 @@ function clicou()
 }
 
 function autoFillClick() {
-	var client = ZAFClient.init();
 	ticketOrganize(client, function(data){
 		showInfo(data);
 		hideConditionals();
@@ -61,19 +122,19 @@ function autoFillClick() {
 
 function menu()
 {
-	var client = ZAFClient.init();
 	var filhos=[];
 	var variaveis={};
-	requestCurrentTicket(client, function(data) {
+	requestCurrentTicket(client, function(data){
 		var settings = {
 				url: '/api/v2/search.json?query=type:ticket tags:filho_'+data.ticket.id,
 				type:'GET',
+				async: false,
 				dataType: 'json',
 			};
 		client.request(settings).then(
 			function(data)
 			{
-				console.log(data);
+				//console.log(data);
 				if(data.count>0)
 				{
 					$.each(data.results, function(index,info)
@@ -81,16 +142,41 @@ function menu()
 						var filho={};
 						filho['assunto']=info.subject;
 						filho['id']=info.id;
-						filho['url']='https://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
+						filho['url']=info.url;
 						filhos.push(filho);
 					});
 				}
-				variaveis.filhos=filhos;
-				var source = $("#menu").html();
-				var template = Handlebars.compile(source);
-				console.log(variaveis);
-				var html = template(variaveis);
-				$("#content").html(html);
+				
+				var settings = {
+						url: '/api/v2/search.json?query=type:ticket tags:filho_'+data.ticket.id,
+						type:'GET',
+						async: false,
+						dataType: 'json',
+					};
+				client.request(settings).then(
+					function(data)
+					{
+						//console.log(data);
+						if(data.count>0)
+						{
+							$.each(data.results, function(index,info)
+							{
+								var filho={};
+								filho['assunto']=info.subject;
+								filho['id']=info.id;
+								filho['url']=info.url;
+								filhos.push(filho);
+							});
+						}
+						
+						
+						variaveis.filhos=filhos;
+						var source = $("#menu").html();
+						var template = Handlebars.compile(source);
+						//console.log(variaveis);
+						var html = template(variaveis);
+						$("#content").html(html);
+					});
 			}
 		);
 	});
@@ -210,65 +296,6 @@ function requestAllTicketFields(client, callback) {
 	});
 };
 
-function cria_ticket()
-{
-	var client = ZAFClient.init();
-	var formulario = [];
-	var currentTicketForm = CURRENT_FORM.ticket_form.ticket_field_ids;
-	$.each(currentTicketForm, function(index,id)
-	{
-		if($('#'+id).val()!=undefined)
-		{
-			var i={};
-			i['id']=id;
-			i['value']=$('#'+id).val();
-			formulario.push(i);
-		}
-	});
-	
-	var tags=CURRENT_TICKET.ticket.tags;
-	tags[tags.length] = 'filho_'+CURRENT_TICKET.ticket.id;
-	tags[tags.length] = 'filho';
-	
-	var settings = {
-	url: '/api/v2/tickets.json',
-	contentType:'application/json',
-	type: 'POST',
-	data: JSON.stringify(
-		{
-			ticket: {
-				subject : $('#subject_id').val(),
-				comment : { body: $('#description_id').val() },
-				priority : $('#priority').val(),
-				tags : tags,
-				ticket_form_id : CURRENT_TICKET.ticket.ticket_form_id,
-				brand_id : CURRENT_TICKET.ticket.brand_id,
-				custom_fields: formulario
-			}
-		}
-	)};
-	client.request(settings);
-	
-	tags.pop();
-	tags.pop();
-	tags[tags.length] = 'pai';
-
-	var settings = {
-	url: '/api/v2/tickets/'+CURRENT_TICKET.ticket.id+'.json',
-	contentType:'application/json',
-	type: 'PUT',
-	data: JSON.stringify(
-		{
-			ticket: {
-				id : CURRENT_TICKET.ticket.id,
-				tags : tags
-			}
-		}
-	)};
-	client.request(settings);
-	menu();
-};
-
 //function to organize the current form into a JSON with all info
 function ticketOrganize(client, callback) {
 	campos_requeridos = [];
@@ -351,6 +378,7 @@ function valida_campos_requeridos()
 		if($('#'+id).val()=="")
 		{
 			$('#error_'+id).html('Atenção, este campo é obrigatório.');
+			console.log(id);
 			$('#'+id).focus();
 			error=true;
 		}
