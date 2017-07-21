@@ -123,10 +123,18 @@ function autoFillClick() {
 function menu()
 {
 	var filhos=[];
-	var variaveis={};
-	requestCurrentTicket(client, function(data){
+	var pai=[];
+	variavel=[];
+	requestCurrentTicket(client, function(ticketAtual){
+		
+		
+		var source = $("#menu").html();
+		var template = Handlebars.compile(source);
+		var html = template(variavel);
+		$("#content").html(html);
+		
 		var settings = {
-				url: '/api/v2/search.json?query=type:ticket tags:filho_'+data.ticket.id,
+				url: '/api/v2/search.json?query=type:ticket tags:filho_'+ticketAtual.ticket.id,
 				type:'GET',
 				async: false,
 				dataType: 'json',
@@ -134,7 +142,6 @@ function menu()
 		client.request(settings).then(
 			function(data)
 			{
-				//console.log(data);
 				if(data.count>0)
 				{
 					$.each(data.results, function(index,info)
@@ -142,43 +149,49 @@ function menu()
 						var filho={};
 						filho['assunto']=info.subject;
 						filho['id']=info.id;
-						filho['url']=info.url;
+						filho['status']=info.status;
+						filho['url']='https://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
 						filhos.push(filho);
 					});
 				}
-				
-				var settings = {
-						url: '/api/v2/search.json?query=type:ticket tags:filho_'+data.ticket.id,
-						type:'GET',
-						async: false,
-						dataType: 'json',
-					};
-				client.request(settings).then(
-					function(data)
-					{
-						//console.log(data);
-						if(data.count>0)
-						{
-							$.each(data.results, function(index,info)
-							{
-								var filho={};
-								filho['assunto']=info.subject;
-								filho['id']=info.id;
-								filho['url']=info.url;
-								filhos.push(filho);
-							});
-						}
-						
-						
-						variaveis.filhos=filhos;
-						var source = $("#menu").html();
-						var template = Handlebars.compile(source);
-						//console.log(variaveis);
-						var html = template(variaveis);
-						$("#content").html(html);
-					});
+				variavel.filhos=filhos;
+
+				var source = $("#tickets_filho").html();
+				var template = Handlebars.compile(source);
+				var html = template(variavel);
+				$("#box_filho").html(html);
 			}
 		);
+		
+		variavel=[];
+		console.log(variavel);
+		tags=ticketAtual.ticket.tags;
+		if(tags.indexOf('filho')!=(-1))
+		{
+			$.each(tags, function(index,tag)
+			{
+				if(tag.indexOf('filho_')!=(-1))
+				{
+					pai.id=tag.slice(6);
+					var settings = {
+							url: '/api/v2/tickets/'+pai.id+'.json',
+							type:'GET',
+							async: false,
+							dataType: 'json',
+						};
+					client.request(settings).then(
+						function(data)
+						{
+							var source = $("#tickets_pais").html();
+							var template = Handlebars.compile(source);
+							var html = template(data);
+							$("#box_pai").html(html);
+
+						}
+					);
+				}
+			});
+		}
 	});
 }
 

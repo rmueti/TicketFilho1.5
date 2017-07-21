@@ -33,11 +33,7 @@
 						<div class="panel-heading">
 							<h3 class="panel-title">Ticket Pai</h3>
 						</div>
-						<div class="panel-body">
-							{{#if father}}
-							<p>{{father}}</p>
-							{{/if}}
-							
+						<div class="panel-body" id="box_pai">
 						</div>
 					</div>
 				</div>
@@ -46,14 +42,63 @@
 						<div class="panel-heading">
 							<h3 class="panel-title">Ticket(s) Filho(s)</h3>
 						</div>
-						<div class="panel-body">
-							{{#each filhos}}
-								<p><span class="label label-primary">{{this.id}}</span> <a href="#/tickets/{{this.id}}">{{this.assunto}}</a></p>
-							{{/each}}
+						<div class="panel-body" id="box_filho">
 						</div>
 					</div>
 				</div>
 			</form>
+		</script>
+		
+		<script id="tickets_pais" type="text/x-handlebars-template">
+			{{#if ticket}}
+				<p>
+					{{#ifEquals ticket.status 'new'}}
+						<span class="label label-warning">
+					{{/ifEquals}}
+					{{#ifEquals ticket.status 'open'}}
+						<span class="label label-danger">
+					{{/ifEquals}}
+					{{#ifEquals ticket.status 'pending'}}
+						<span class="label label-info">
+					{{/ifEquals}}
+					{{#ifEquals ticket.status 'hold'}}
+						<span class="label label-inverse">
+					{{/ifEquals}}
+					{{#ifEquals ticket.status 'solved'}}
+						<span class="label label-deafult">
+					{{/ifEquals}}
+						{{ticket.id}}
+					</span>&nbsp;
+					<a href="#/tickets/{{this.id}}">{{ticket.subject}}</a>
+				</p>
+			{{else}}
+				Não tem dad!
+			{{/if}}
+		</script>
+		
+		<script id="tickets_filho" type="text/x-handlebars-template">
+			{{#each filhos}}
+				<p>
+					{{#ifEquals this.status 'new'}}
+						<span class="label label-warning">
+					{{/ifEquals}}
+					{{#ifEquals this.status 'open'}}
+						<span class="label label-danger">
+					{{/ifEquals}}
+					{{#ifEquals this.status 'pending'}}
+						<span class="label label-info">
+					{{/ifEquals}}
+					{{#ifEquals this.status 'hold'}}
+						<span class="label label-inverse">
+					{{/ifEquals}}
+					{{#ifEquals this.status 'solved'}}
+						<span class="label label-default">
+					{{/ifEquals}}
+						{{this.id}}
+					</span>&nbsp;
+					<a href="#/tickets/{{this.id}}">{{this.assunto}}</a>
+				</p>
+			{{/each}}
 		</script>
 			
 		<script id="requester-template" type="text/x-handlebars-template">
