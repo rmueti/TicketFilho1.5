@@ -69,7 +69,7 @@
 					{{/ifEquals}}
 						{{ticket.id}}
 					</span>&nbsp;
-					{{ticket.subject}} #{{ticket.id}}
+					<a href="https://tmfbrasil.zendesk.com/agent/tickets/{{ticket.id}}" target="_blank">{{ticket.subject}}</a>
 				</p>
 			{{/if}}
 		</script>
@@ -94,7 +94,7 @@
 					{{/ifEquals}}
 						{{this.id}}
 					</span>&nbsp;
-					{{this.assunto}}
+					<a href="https://tmfbrasil.zendesk.com/agent/tickets/{{this.id}}" target="_blank">{{this.subject}}</a>
 				</p>
 			{{/each}}
 		</script>
@@ -155,6 +155,14 @@
 							</div>
 						{{/ifEquals}}
 						
+						{{#ifEquals this.type 'date'}}
+							<div style="padding-top: 10px" id="campo_{{this.id}}">
+								<label for="{{this.id}}">{{this.title}}</label>
+								<input type="date" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<small id="error_{{this.id}}" class="form-text text-muted"></small>
+							</div>
+						{{/ifEquals}}
+						
 						{{#ifEquals this.type 'textarea'}}
 							<div style="padding-top: 10px" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
@@ -162,6 +170,7 @@
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
+						
 
 						{{#ifEquals this.type 'tagger'}}
 						<div style="padding-top: 10px" id="campo_{{this.id}}">
