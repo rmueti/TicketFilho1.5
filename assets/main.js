@@ -2,10 +2,15 @@ var campos_requeridos = [];
 var CURRENT_TICKET = {};
 var CURRENT_FORM = {};
 var client = null;
+var cfaRules = null;
+
 
 $(document).ready(function() {
 	client = ZAFClient.init();
 	client.invoke('resize', { width: '100%', height: '400px' });
+	client.metadata().then(function(data){
+		cfaRules=JSON.parse(data.settings.cfaRules);
+	});
 	menu();
 });
 
@@ -169,7 +174,6 @@ function menu()
 		);
 		
 		variavel=[];
-		//console.log(variavel);
 		tags=ticketAtual.ticket.tags;
 		if(tags.indexOf('filho')!=(-1))
 		{
