@@ -7,14 +7,10 @@ var cfaRules = null;
 
 $(document).ready(function() {
 	client = ZAFClient.init();
-<<<<<<< HEAD
 	client.invoke('resize', { width: '100%', height: '400px' });
 	client.metadata().then(function(data){
 		cfaRules=JSON.parse(data.settings.cfaRules);
 	});
-=======
-	client.invoke('resize', { width: '100%', height: '420px' });
->>>>>>> f76c054532f3dba1efd3c820a3d54c36d30adf93
 	menu();
 });
 
