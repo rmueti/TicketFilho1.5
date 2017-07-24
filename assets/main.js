@@ -5,8 +5,12 @@ var client = null;
 var cfaRules = null;
 var dominio = null;
 
-
-$(document).ready(function() {
+/*
+Função principal
+Cria o aplicativo e seta os dados definidos de regras de campos
+Busca o dominio da empresa para criar os links
+*/
+$(document).ready(function(){
 	client = ZAFClient.init();
 	client.invoke('resize', { width: '100%', height: '400px' });
 	client.metadata().then(function(data){
@@ -16,6 +20,12 @@ $(document).ready(function() {
 	menu();
 });
 
+/*
+Função de criação do ticket filho.
+Captura os dados do formulário do aplicativo
+Seta as tags de pai e filho
+Insere o ticket filho no Zendesk e altera o ticket pai com a tag
+*/
 function cria_ticket()
 {
 	var formulario = [];
@@ -78,6 +88,9 @@ function cria_ticket()
 	menu();
 };
 
+/*
+Função de criação do ticket com o formulário em branco
+*/
 function clicou()
 {
 	ticketOrganize(client, function(data){
@@ -90,7 +103,9 @@ function clicou()
 	});
 }
 
-//this method fill all fields of the Son ticket using the father info.
+/*
+Função de criação do ticket já com os dados clonados do pai
+*/
 function autoFillClick() {
 	ticketOrganize(client, function(data){
 		showInfo(data);
@@ -133,6 +148,9 @@ function autoFillClick() {
 	});
 }
 
+/*
+Criação do menu
+*/
 function menu()
 {
 	var filhos=[];
@@ -208,6 +226,9 @@ function menu()
 	});
 }
 
+/*
+Função que capta as informações das funções e inclui no template
+*/
 function showInfo(data)
 {
 	var source = $("#requester-template").html();
@@ -423,6 +444,9 @@ function hideSomething(newStack) {
 	}
 }
 
+/*
+Verifica se os campos são obrigatórios ou não.
+*/
 function valida_campos_requeridos()
 {
 	var error=false;
