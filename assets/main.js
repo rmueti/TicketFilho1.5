@@ -101,7 +101,10 @@ function autoFillClick() {
 			for(i=0; i < allElems.length; i++){
 				for(j=0; j < allCustoms.length; j++){
 					if(allElems[i].id == allCustoms[j].id) {
-						$('#'+allElems[i].id).val(allCustoms[j].value);						
+						$('#'+allElems[i].id).val(allCustoms[j].value);
+						if(allCustoms[j].value===true) {
+							$('#'+allElems[i].id).prop("checked", true);
+						}
 						break;
 					}
 				}
@@ -314,6 +317,8 @@ function requestAllTicketFields(client, callback) {
 function ticketOrganize(client, callback) {
 	campos_requeridos = [];
 	//empty variable for organized ticket form with all info
+	campos_requeridos.push("subject_id");
+	campos_requeridos.push("description_id");
 	
 	var formatedTicketForm = {
 		ticket_fields : []

@@ -20,3 +20,7 @@ footer {
 body{
 	width: 100% !important; 
 }
+
+small {
+	color: red !important;
+}
