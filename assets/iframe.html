@@ -158,7 +158,7 @@
 						{{#ifEquals this.type 'date'}}
 							<div style="padding-top: 10px" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<input type="date" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<input type="date" class="form-control" id="{{this.id}}" style="height:35px;"/>
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
@@ -174,7 +174,7 @@
 						{{#ifEquals this.type 'decimal'}}
 							<div style="padding-top: 10px" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<input type="text" class="form-control" id="{{this.id}}" placeholder="Ex.: 123,45" style="height:35px;"/>
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
@@ -182,7 +182,7 @@
 						{{#ifEquals this.type 'integer'}}
 							<div style="padding-top: 10px" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<input type="text" class="form-control" id="{{this.id}}" placeholder="Ex.: 12345" style="height:35px;"/>
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}
@@ -190,7 +190,7 @@
 						{{#ifEquals this.type 'regexp'}}
 							<div style="padding-top: 10px" id="campo_{{this.id}}">
 								<label for="{{this.id}}">{{this.title}}</label>
-								<input type="text" class="form-control" id="{{this.id}}" placeholder="{{this.raw_title}}" style="height:35px;"/>
+								<input type="text" class="form-control" id="{{this.id}}" placeholder="Ex.: EXE-789" style="height:35px;"/>
 								<small id="error_{{this.id}}" class="form-text text-muted"></small>
 							</div>
 						{{/ifEquals}}

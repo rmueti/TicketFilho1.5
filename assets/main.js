@@ -78,6 +78,7 @@ function clicou()
 		hideConditionals();
 		requestCurrentTicket(client, function(data) {
 			CURRENT_TICKET = data;
+			$('#subject_id').val(" - FILHO DO " + data.ticket.id);
 		});
 	});
 }
@@ -90,7 +91,7 @@ function autoFillClick() {
 			CURRENT_TICKET = data;
 			
 			//fill standard fields
-			$('#subject_id').val(data.ticket.subject);
+			$('#subject_id').val(data.ticket.subject + " - FILHO DO " + data.ticket.id);
 			$('#description_id').val(data.ticket.description);
 			$('#stickettype_id').val(data.ticket.type);
 			$('#priority_id').val(data.ticket.priority);
@@ -150,11 +151,11 @@ function menu()
 				{
 					$.each(data.results, function(index,info)
 					{
-						var filho={};
-						filho['assunto']=info.subject;
-						filho['id']=info.id;
-						filho['status']=info.status;
-						filho['url']='https://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
+						var filho = {};
+						filho['subject'] = info.subject;
+						filho['id'] = info.id;
+						filho['status'] = info.status;
+						filho['url'] = 'https://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
 						filhos.push(filho);
 					});
 				}
