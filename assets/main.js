@@ -3,6 +3,7 @@ var CURRENT_TICKET = {};
 var CURRENT_FORM = {};
 var client = null;
 var cfaRules = null;
+var dominio = null;
 
 
 $(document).ready(function() {
@@ -11,6 +12,7 @@ $(document).ready(function() {
 	client.metadata().then(function(data){
 		cfaRules=JSON.parse(data.settings.cfaRules);
 	});
+	dominio=client._origin;
 	menu();
 });
 
@@ -161,7 +163,7 @@ function menu()
 						filho['subject'] = info.subject;
 						filho['id'] = info.id;
 						filho['status'] = info.status;
-						filho['url'] = 'https://tmfbrasil.zendesk.com/agent/tickets/'+info.id;
+						filho['url'] = dominio+'/tickets/'+info.id;
 						filhos.push(filho);
 					});
 				}
@@ -194,6 +196,7 @@ function menu()
 						{
 							var source = $("#tickets_pais").html();
 							var template = Handlebars.compile(source);
+							data.ticket.url=dominio+'/tickets/'+data.ticket.id;
 							var html = template(data);
 							$("#box_pai").html(html);
 

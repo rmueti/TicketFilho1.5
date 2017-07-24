@@ -69,7 +69,7 @@
 					{{/ifEquals}}
 						{{ticket.id}}
 					</span>&nbsp;
-					<a href="https://tmfbrasil.zendesk.com/agent/tickets/{{ticket.id}}" target="_blank">{{ticket.subject}}</a>
+					<a href="{{ticket.url}}" target="_blank">{{ticket.subject}}</a>
 				</p>
 			{{/if}}
 		</script>
@@ -94,7 +94,7 @@
 					{{/ifEquals}}
 						{{this.id}}
 					</span>&nbsp;
-					<a href="https://tmfbrasil.zendesk.com/agent/tickets/{{this.id}}" target="_blank">{{this.subject}}</a>
+					<a href="{{this.url}}" target="_blank">{{this.subject}}</a>
 				</p>
 			{{/each}}
 		</script>
