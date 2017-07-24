@@ -5,7 +5,7 @@ var client = null;
 
 $(document).ready(function() {
 	client = ZAFClient.init();
-	client.invoke('resize', { width: '100%', height: '400px' });
+	client.invoke('resize', { width: '100%', height: '420px' });
 	menu();
 });
 
@@ -83,6 +83,7 @@ function clicou()
 	});
 }
 
+//this method fill all fields of the Son ticket using the father info.
 function autoFillClick() {
 	ticketOrganize(client, function(data){
 		showInfo(data);
